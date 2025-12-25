@@ -1,15 +1,29 @@
 import { useState, useEffect, useCallback } from "react";
 import { fetchArticles, updateArticles } from "@/services/articleAPI";
 import toast from "react-hot-toast";
+import { Article } from "@/types/article";
 
 const STORAGE_KEY = "original_articles";
 
+interface ApiResponse {
+  data: {
+    originalArticle: any;
+    updatedArticle: {
+      title: string;
+      content: string;
+      slug?: string;
+      version?: string;
+      references?: string[];
+    };
+  };
+}
+
 export const useArticles = () => {
-  const [originalArticles, setOriginalArticles] = useState([]);
-  const [updatedArticles, setUpdatedArticles] = useState([]);
-  const [isLoadingOriginal, setIsLoadingOriginal] = useState(true);
-  const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
-  const [hasUpdated, setHasUpdated] = useState(false);
+  const [originalArticles, setOriginalArticles] = useState<Article[]>([]);
+  const [updatedArticles, setUpdatedArticles] = useState<Article[]>([]);
+  const [isLoadingOriginal, setIsLoadingOriginal] = useState<boolean>(true);
+  const [isLoadingUpdate, setIsLoadingUpdate] = useState<boolean>(false);
+  const [hasUpdated, setHasUpdated] = useState<boolean>(false);
 
   // Fetch and store original articles on mount
   useEffect(() => {
@@ -42,7 +56,7 @@ export const useArticles = () => {
   }, []);
 
   // Transform API response to Article format
-  const transformUpdatedArticle = (apiResponse) => {
+  const transformUpdatedArticle = (apiResponse: ApiResponse): Article[] => {
     if (!apiResponse?.data?.updatedArticle) {
       return [];
     }
@@ -50,7 +64,7 @@ export const useArticles = () => {
     const { originalArticle, updatedArticle } = apiResponse.data;
     
     // Extract excerpt from content (first paragraph or first 200 characters)
-    const getExcerpt = (content) => {
+    const getExcerpt = (content: string): string => {
       if (!content) return "";
       // Try to get first paragraph
       const firstParagraph = content.split("\n\n")[0];
@@ -62,7 +76,7 @@ export const useArticles = () => {
     };
 
     // Calculate read time based on content length (average reading speed: 200 words/min)
-    const calculateReadTime = (content) => {
+    const calculateReadTime = (content: string): string => {
       if (!content) return "5 min read";
       const wordCount = content.split(/\s+/).length;
       const minutes = Math.ceil(wordCount / 200);
@@ -72,7 +86,7 @@ export const useArticles = () => {
     const currentDate = new Date().toISOString();
     const currentDateShort = currentDate.split("T")[0];
     
-    const transformedArticle = {
+    const transformedArticle: Article = {
       id: originalArticle?.id || Date.now(),
       title: updatedArticle.title || "",
       excerpt: getExcerpt(updatedArticle.content),
@@ -100,7 +114,7 @@ export const useArticles = () => {
       console.log("Update response:", response);
       
       // Transform the API response to match Article interface
-      const transformedArticles = transformUpdatedArticle(response);
+      const transformedArticles = transformUpdatedArticle(response as ApiResponse);
       
       if (transformedArticles.length === 0) {
         throw new Error("No updated article found in response");
@@ -126,3 +140,4 @@ export const useArticles = () => {
     handleUpdate,
   };
 };
+
