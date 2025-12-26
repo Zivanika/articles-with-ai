@@ -22,7 +22,7 @@ Articles/
 
 ---
 
-## Phase 1: Laravel Backend (Moderate Difficulty)
+## Phase 1: Laravel Backend 
 
 ### Description
 Scrapes the 5 oldest articles from BeyondChats blogs section and stores them in a database. Provides CRUD APIs for article management.
@@ -121,7 +121,7 @@ All endpoints are prefixed with `/api`
 
 ---
 
-## Phase 2: Node.js Article Enhancement Service (Very Difficult)
+## Phase 2: Node.js Article Enhancement Service
 
 ### Description
 A Node.js service that:
@@ -205,7 +205,7 @@ A Node.js service that:
 
 ---
 
-## Phase 3: React Frontend (Very Easy)
+## Phase 3: React Frontend
 
 ### Description
 A modern React application built with Vite and TypeScript that displays articles from the Laravel API. Shows both original and enhanced versions of articles in a responsive, professional UI.
@@ -239,6 +239,8 @@ A modern React application built with Vite and TypeScript that displays articles
 3. **Configure API endpoint**:
    Create or update `.env` file:
    ```env
+   VITE_LARAVEL_API_BASE=http://localhost:8000/api
+   VITE_NODE_API_BASE=http://localhost:5000
    VITE_API_URL=http://localhost:8000/api
    ```
 
@@ -354,6 +356,8 @@ PORT=5000
 ### Phase 3 (React)
 ```env
 VITE_API_URL=http://localhost:8000/api
+VITE_LARAVEL_API_BASE=http://localhost:8000/api
+VITE_NODE_API_BASE=http://localhost:5000
 ```
 
 ---
