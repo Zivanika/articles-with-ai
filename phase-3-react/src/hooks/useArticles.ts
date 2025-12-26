@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { fetchArticles, updateArticles } from "@/services/articleAPI";
 import toast from "react-hot-toast";
-import { Article } from "@/types/article";
+import type { Article } from "@/types/article";
 
 const STORAGE_KEY = "original_articles";
 
